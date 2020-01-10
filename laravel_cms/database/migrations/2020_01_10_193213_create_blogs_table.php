@@ -15,10 +15,13 @@ class CreateBlogsTable extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->text('title');  # title of article
+            $table->text('content');    # article
+            $table->bigInteger('user'); # blog owner
+            $table->string('page_path');   # url of page that contains a article
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
