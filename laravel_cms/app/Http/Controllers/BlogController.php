@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Blog;
 use Illuminate\Http\Request;
-
+use Auth;
+use App\User;
 class BlogController extends Controller
 {
     /**
@@ -45,7 +46,7 @@ class BlogController extends Controller
         $blog = new Blog();
         $blog['title']= $request->title;
         $blog->contents = $request->contents;
-        $blog->user = $request->user()->id;
+        $blog->user_id = $request->user()->id;
         $blog->page_path = $request->getPathInfo();
         $blog->save();
 
@@ -91,8 +92,8 @@ class BlogController extends Controller
 
         $blog['title']= $request->title;
         $blog->contents = $request->contents;
-        $blog->user = $request->user()->id;
-        $blog->page_path = $request->getPathInfo();
+//        $blog->user = $request->user();
+//        $blog->page_path = $request->getPathInfo();
         $blog->save();
 
 

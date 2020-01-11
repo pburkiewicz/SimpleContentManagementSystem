@@ -8,7 +8,9 @@
                 <span>{{ $blogs->created_at }}</span>
                 @markdown($blogs->contents)
 
-                @if (Auth::user()->id == $blogs->user)
+                <a href="{{ route('comments.create', $blogs) }}">Add comment</a>
+
+                @if (Auth::user() == $blogs->user)  {{-- Only the owner of the post is able to edit or delete it --}}
                     <a href="{{ route('blogs.edit', $blogs) }}">edit</a>
                     <form method="post" action="{{ route('blogs.destroy', $blogs) }}">
                         {{ method_field('DELETE') }}
