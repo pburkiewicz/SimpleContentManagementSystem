@@ -52,12 +52,13 @@ class GalleryController extends Controller
         Storage::disk('public')->put($filename,  File::get($image));
 
         $gallery = new Gallery;
-        //$gallery->title = $request->title;
-        //$gallery->description = $request ->description;
+        $gallery->title = $request->title;
+        $gallery->description = $request ->description;
         $gallery->mime = $image->getClientMimeType();
         $gallery->original_filename = $image->getClientOriginalName();
         $gallery->filename = $filename;
         $gallery->save();
+        //dd($gallery);
         return redirect('/gallery');
     }
 
