@@ -29,3 +29,5 @@ Route::resource('/blogs', 'BlogController');//  [
 //    ]);#->middleware('auth');
 
 Route::resource('/blogs/{blog}/comments', 'CommentController');
+
+
