@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,3 +27,5 @@ Route::resource('/blogs', 'BlogController');//  [
 //        'edit' => 'blogs.edit',
 //        'show' => 'blogs.show',]
 //    ]);#->middleware('auth');
+
+Route::resource('/blogs/{blog}/comments', 'CommentController');
