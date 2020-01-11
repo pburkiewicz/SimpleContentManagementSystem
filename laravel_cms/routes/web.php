@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +21,11 @@ Auth::routes();
 Route::resource('gallery','GalleryController');
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('/blogs', 'BlogController');//  [
+//    'names' => [
+//        'create' => 'blogs.create',
+//        'edit' => 'blogs.edit',
+//        'show' => 'blogs.show',]
+//    ]);#->middleware('auth');
+
+Route::resource('/blogs/{blog}/comments', 'CommentController');

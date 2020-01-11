@@ -16,8 +16,9 @@ class CreateBlogsTable extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('title');  # title of article
-            $table->text('content');    # article
-            $table->bigInteger('user'); # blog owner
+            $table->text('contents');    # article
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); # blog owner
             $table->string('page_path');   # url of page that contains a article
             $table->timestamps();
         });

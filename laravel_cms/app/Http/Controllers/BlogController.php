@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Blog;
 use Illuminate\Http\Request;
 
+
 class BlogController extends Controller
 {
     /**
@@ -14,7 +15,9 @@ class BlogController extends Controller
      */
     public function index()
     {
-        //
+
+        $posts = Blog::all();
+        return view('blogs.index')->withBlogs($posts);
     }
 
     /**
@@ -24,7 +27,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        return view('blogs.create');
     }
 
     /**
@@ -35,7 +38,20 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'contents' => 'required'
+        ]);
+
+        $blog = new Blog();
+        $blog['title']= $request->title;
+        $blog->contents = $request->contents;
+
+        $blog->user_id = $request->user()->id;
+        $blog->page_path = $request->getPathInfo();
+        $blog->save();
+
+        return redirect()->route('blogs.show', $blog);
     }
 
     /**
@@ -46,7 +62,9 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        //
+
+        $comments = $blog->find($blog->id)->comments;
+        return view('blogs.show')->withBlog($blog)->withComments($comments);
     }
 
     /**
@@ -57,7 +75,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        //
+        return view('blogs.edit')->withBook($blog);
     }
 
     /**
@@ -69,7 +87,20 @@ class BlogController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'contents' => 'required'
+        ]);
+
+
+        $blog['title']= $request->title;
+        $blog->contents = $request->contents;
+//        $blog->user = $request->user();
+//        $blog->page_path = $request->getPathInfo();
+        $blog->save();
+
+
+        return redirect()->route('blogs.show', $blog);
     }
 
     /**
@@ -80,6 +111,7 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        //
+        $blog->delete();
+        return redirect()->route('blogs.index');
     }
 }

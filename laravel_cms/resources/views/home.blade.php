@@ -16,6 +16,7 @@
 
                     You are logged in!
                 </div>
+                <a href="{{ url('blogs') }}">Go to the posts.</a>
             </div>
         </div>
     </div>
