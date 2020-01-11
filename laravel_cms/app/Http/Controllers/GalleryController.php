@@ -104,6 +104,9 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
-        //
+        $image = Gallery::findOrFail($gallery);
+        File::delete("uploads/" . $image[0]->filename);
+        Gallery::findOrFail($gallery)->first()->delete();
+        return redirect('gallery/');
     }
 }
