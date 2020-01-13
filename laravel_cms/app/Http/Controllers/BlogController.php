@@ -95,7 +95,8 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        return view('blogs.edit')->withBook($blog);
+        $galleries = Gallery::where('blog_id', $blog->id)->first();
+        return view('blogs.edit')->withBook($blog)->withGalleries($galleries);
     }
 
     /**
@@ -109,7 +110,8 @@ class BlogController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'contents' => 'required'
+            'contents' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
@@ -117,9 +119,28 @@ class BlogController extends Controller
         $blog->contents = $request->contents;
 //        $blog->user = $request->user();
 //        $blog->page_path = $request->getPathInfo();
+        $gallery = Gallery::where('blog_id', $blog->id)->first();
+        $image = $request->file('image');
+        if (!$gallery && $image )$gallery = new Gallery;
+        if($image && $gallery) {
+            $extension = $image->getClientOriginalExtension();
+            $filename = time() . '.' . $image->getFilename() . '.' . $extension;
+            Storage::disk('public')->put($filename, File::get($image));
+            File::delete("uploads/" . $image->filename);
+            $gallery->mime = $image->getClientMimeType();
+            $gallery->original_filename = $image->getClientOriginalName();
+            $gallery->filename = $filename;
+            $gallery->blog_id=$blog->id;
+            $gallery->description = $request->description;
+            $gallery->save();
+        }
+        if(!$image && $gallery)
+        {
+            $gallery->description = $request->description;
+            $gallery->save();
+        }
+
         $blog->save();
-
-
         return redirect()->route('blogs.show', $blog);
     }
 
