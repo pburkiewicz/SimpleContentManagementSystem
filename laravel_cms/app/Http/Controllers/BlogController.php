@@ -84,7 +84,8 @@ class BlogController extends Controller
     {
 
         $comments = $blog->find($blog->id)->comments;
-        return view('blogs.show')->withBlog($blog)->withComments($comments);
+        $galleries = Gallery::where('blog_id',$blog->id);
+        return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
     }
 
     /**
