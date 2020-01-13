@@ -11,10 +11,12 @@
                 <ul>
                     @forelse($blogs as $blog)
                         <li>
-                            <strong><a href ="{{ route('blogs.show', $blog) }}">{{ $blog->title }}</a></strong> <span>{{ $blog->created_at }}</span>
+                            <h2><strong><a href ="{{ route('blogs.show', $blog) }}">{{ $blog->title }}</a></strong></h2> <span>{{ $blog->created_at }}</span>
 
                         <div>
-                            <p>{{ $blog->contents }}</p>
+                            <p>
+                                @markdown($blog->contents)
+                            </p>
                         </div>
                         </li>
                         @empty

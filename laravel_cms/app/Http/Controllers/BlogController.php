@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Blog;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use App\Gallery;
 
 class BlogController extends Controller
 {
@@ -13,11 +15,12 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-
+        $galleries = Gallery::all();
         $posts = Blog::all();
-        return view('blogs.index')->withBlogs($posts);
+        return view('blogs.index')->withBlogs($posts)->withGalleries($galleries);
     }
 
     /**
@@ -27,6 +30,7 @@ class BlogController extends Controller
      */
     public function create()
     {
+
         return view('blogs.create');
     }
 
@@ -38,9 +42,11 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required',
-            'contents' => 'required'
+            'contents' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $blog = new Blog();
@@ -51,6 +57,20 @@ class BlogController extends Controller
         $blog->page_path = $request->getPathInfo();
         $blog->save();
 
+        $image = $request->file('image');
+        if($image) {
+            $extension = $image->getClientOriginalExtension();
+            $filename = time() . '.' . $image->getFilename() . '.' . $extension;
+            Storage::disk('public')->put($filename, File::get($image));
+
+            $gallery = new Gallery;
+            $gallery->description = $request->description;
+            $gallery->mime = $image->getClientMimeType();
+            $gallery->original_filename = $image->getClientOriginalName();
+            $gallery->filename = $filename;
+            $gallery->post_id=$blog->id;
+            $gallery->save();
+        }
         return redirect()->route('blogs.show', $blog);
     }
 
@@ -111,6 +131,8 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
+        $images = Gallery::where('blog_id',$blog->id);
+        foreach($images as $image) File::delete("uploads/" . $image->filename);
         $blog->delete();
         return redirect()->route('blogs.index');
     }
