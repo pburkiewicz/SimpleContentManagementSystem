@@ -12,12 +12,13 @@
                 <strong>
                     @markdown($image->description)
                 </strong>
+            </p>
             <form action="/gallery/{{$image->id}}" method="POST">
                 @csrf
                 @method("DELETE")
                 <input  type="submit" name="Delete" value="Delete">
             </form>
-            </p>
+
         </div>
     </div>
 </div>

@@ -8,7 +8,7 @@
                     <div class="card-header">{{ __('Posts') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('blogs.store') }}">
+                        <form method="POST" action="{{ route('blogs.store') }}" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-group row">
@@ -36,6 +36,29 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="file" class="col-md-4 col-form-label text-md-right">{{ __('Image') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image" value="{{old("image")}}" autofocus>
+
+                                    @error('image')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Image Description') }}</label>
+
+                                <div class="col-md-6">
+                                    <textarea id="description"  class="form-control " name="description" autocomplete="description" autofocus>{{ old('description') }}</textarea>
+
                                 </div>
                             </div>
 

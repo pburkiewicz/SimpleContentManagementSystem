@@ -18,9 +18,8 @@ class BlogController extends Controller
 
     public function index()
     {
-        $galleries = Gallery::all();
         $posts = Blog::all();
-        return view('blogs.index')->withBlogs($posts)->withGalleries($galleries);
+        return view('blogs.index')->withBlogs($posts);
     }
 
     /**
@@ -68,7 +67,7 @@ class BlogController extends Controller
             $gallery->mime = $image->getClientMimeType();
             $gallery->original_filename = $image->getClientOriginalName();
             $gallery->filename = $filename;
-            $gallery->post_id=$blog->id;
+            $gallery->blog_id=$blog->id;
             $gallery->save();
         }
         return redirect()->route('blogs.show', $blog);
@@ -84,7 +83,7 @@ class BlogController extends Controller
     {
 
         $comments = $blog->find($blog->id)->comments;
-        $galleries = Gallery::where('blog_id',$blog->id);
+        $galleries = Gallery::where('blog_id', $blog->id)->first();
         return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
     }
 
@@ -132,8 +131,8 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        $images = Gallery::where('blog_id',$blog->id);
-        foreach($images as $image) File::delete("uploads/" . $image->filename);
+        $image = Gallery::where('blog_id',$blog->id)->find();
+        File::delete("uploads/" . $image->filename);
         $blog->delete();
         return redirect()->route('blogs.index');
     }

@@ -8,6 +8,18 @@
             <div class="col-md-8">
                 <h2>{{ $blog->title }}</h2>
                 <span>{{ $blog->created_at }}</span>
+
+                @if($galleries)
+                <div class="card">
+                    <img class="card-img-top" src="{{url('uploads/'.$galleries->filename)}}" alt="{{$galleries->original_filename}}">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>
+                                @markdown($galleries->description)
+                            </strong>
+                    </div>
+                </div>
+                @endif
                 @markdown($blog->contents)
                 @if (Auth::user() == $blog->user)  {{-- Only the owner of the post is able to edit or delete it --}}
                 <a href="{{ route('blogs.edit', $blog) }}">edit</a>

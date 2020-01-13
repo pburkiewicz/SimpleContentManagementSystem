@@ -14,6 +14,17 @@
                             <h2><strong><a href ="{{ route('blogs.show', $blog) }}">{{ $blog->title }}</a></strong></h2> <span>{{ $blog->created_at }}</span>
 
                         <div>
+                            @if($image=\App\Gallery::where('blog_id', $blog->id)->first())
+                                <div class="card">
+                                    <img class="card-img-top" src="{{url('uploads/'.$image->filename)}}" alt="{{$image->original_filename}}">
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            <strong>
+                                                @markdown($image->description)
+                                            </strong>
+                                    </div>
+                                </div>
+                            @endif
                             <p>
                                 @markdown($blog->contents)
                             </p>
