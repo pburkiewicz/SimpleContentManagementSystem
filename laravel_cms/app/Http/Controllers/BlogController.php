@@ -121,12 +121,15 @@ class BlogController extends Controller
 //        $blog->page_path = $request->getPathInfo();
         $gallery = Gallery::where('blog_id', $blog->id)->first();
         $image = $request->file('image');
-        if (!$gallery && $image )$gallery = new Gallery;
-        if($image && $gallery) {
+
+        if($image) {
             $extension = $image->getClientOriginalExtension();
             $filename = time() . '.' . $image->getFilename() . '.' . $extension;
             Storage::disk('public')->put($filename, File::get($image));
-            File::delete("uploads/" . $image->filename);
+            if (!$gallery)
+                $gallery = new Gallery;
+            else
+                File::delete("uploads/" . $image->filename);
             $gallery->mime = $image->getClientMimeType();
             $gallery->original_filename = $image->getClientOriginalName();
             $gallery->filename = $filename;
@@ -134,7 +137,7 @@ class BlogController extends Controller
             $gallery->description = $request->description;
             $gallery->save();
         }
-        if(!$image && $gallery)
+        else if($gallery)
         {
             $gallery->description = $request->description;
             $gallery->save();

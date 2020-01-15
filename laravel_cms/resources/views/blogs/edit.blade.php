@@ -38,6 +38,12 @@
                                     @enderror
                                 </div>
                             </div>
+                            @if($galleries)
+                                <label for="file" class="col-md-4 col-form-label text-md-right">{{ __('Current image') }}</label>
+                                <div class="card">
+                                    <img class="card-img-top" src="{{url('uploads/'.$galleries->filename)}}" alt="{{$galleries->original_filename}}">
+                                </div>
+                            @endif
 
                             <div class="form-group row">
                                 <label for="file" class="col-md-4 col-form-label text-md-right">{{ __('Override Image') }}</label>
