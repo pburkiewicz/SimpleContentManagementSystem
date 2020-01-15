@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{user}', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
@@ -20,7 +20,7 @@ Auth::routes();
 
 Route::resource('gallery','GalleryController');
 
-Route::get('/{user}.home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/blogs', 'BlogController');//  [
 //    'names' => [
 //        'create' => 'blogs.create',
