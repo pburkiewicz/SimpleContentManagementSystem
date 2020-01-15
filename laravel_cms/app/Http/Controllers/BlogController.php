@@ -129,7 +129,7 @@ class BlogController extends Controller
             if (!$gallery)
                 $gallery = new Gallery;
             else
-                File::delete("uploads/" . $image->filename);
+                File::delete("uploads/" . $gallery->filename);
             $gallery->mime = $image->getClientMimeType();
             $gallery->original_filename = $image->getClientOriginalName();
             $gallery->filename = $filename;
