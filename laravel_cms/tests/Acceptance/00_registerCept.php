@@ -1,6 +1,6 @@
 <?php
 $I = new AcceptanceTester($scenario);
-$I->wantTo('register and login');
+$I->wantTo('register new user');
 
 $I->amOnPage('/register');
 
@@ -19,3 +19,5 @@ $I->click('#register');
 $I->seeCurrentUrlEquals('/home');
 
 $I->see('You are logged in!', 'div.card-body');
+
+//$I->click('#logout-form');
