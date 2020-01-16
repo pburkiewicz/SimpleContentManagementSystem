@@ -18,7 +18,7 @@ class BlogController extends Controller
 
     public function index()
     {
-        $posts = Blog::all();
+        $posts = Blog::all()->sortByDesc("created_at");
         // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
         return view('blogs.index')->withBlogs($posts);
     }
