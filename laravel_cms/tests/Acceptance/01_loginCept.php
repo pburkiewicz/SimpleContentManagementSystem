@@ -11,6 +11,8 @@ $I->fillField('password', '12345678');
 
 $I->click('#login');
 
-$I->seeCurrentUrlEquals('/home');
+$I->seeCurrentUrlEquals('/john_doe');
 
 $I->see('You are logged in!', 'div.card-body');
+$I->seeLink('Manage your website');
+$I->seeLink('Create a page.');
