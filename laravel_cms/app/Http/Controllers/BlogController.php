@@ -21,7 +21,6 @@ class BlogController extends Controller
     {
         $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
         //$posts = Blog::where('page_id', $page->id)->get();
-
         $posts = Blog::where('page_id', $page->id)->get();
         $posts = $posts->sortByDesc("created_at");
         // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
@@ -75,7 +74,6 @@ class BlogController extends Controller
             $gallery->blog_id=$blog->id;
             $gallery->save();
         }
-        echo $blog;
         return redirect()->route('blog.show', ['user' => $user, 'path' => $path, 'blog' =>$blog]);
     }
 

@@ -1,5 +1,4 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2>{{ $blog->title }}</h2>
-            <span>{{ $blog->created_at }}</span>
+            <a href="{{ url($page->page_path.'/create') }}">Create new...</a>

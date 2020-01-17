@@ -17,7 +17,6 @@ class CreateGalleriesTable extends Migration
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('page_type');
             $table->unsignedBigInteger('blog_id');
             $table->foreign("blog_id")->references('id')->on('blogs')->onDelete("cascade");
             $table->text('description')->nullable();

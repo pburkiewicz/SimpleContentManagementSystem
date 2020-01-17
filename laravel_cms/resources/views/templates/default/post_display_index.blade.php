@@ -2,24 +2,17 @@
 
 
 
-            <a href="{{ url($page->page_path.'/create') }}">Create new...</a>
+
 
             <ul>
                 @forelse($blogs as $blog)
                     <li>
-                        <h2><strong><a href ="{{ route('blog.show', [ 'blog' => $blog, 'user' => $page->user->page_name, 'path' => $page->page_name , 1]) }}">{{ $blog->title }}</a></strong></h2> <span>{{ $blog->created_at }}</span>
-
+                        @includeIf("templates." . "default"  . ".title_display")
+                        <br>
+                        <a href ="{{ route('blog.show', [ 'blog' => $blog, 'user' => $page->user->page_name, 'path' => $page->page_name , 1]) }}"><strong>show</strong></a>
                         <div>
-                            @if($image=\App\Gallery::where('blog_id', $blog->id)->first())
-                                <div class="card">
-                                    <img class="card-img-top" src="{{url('uploads/'.$image->filename)}}" alt="{{$image->original_filename}}">
-                                    <div class="card-body">
-                                        <p class="card-text">
-                                            <strong>
-                                                @markdown($image->description)
-                                            </strong>
-                                    </div>
-                                </div>
+                            @if($galleries=\App\Gallery::where('blog_id', $blog->id)->first())
+                                @includeIf("templates." . "default"  . ".image_display")
                             @endif
                             <p>
                                 @markdown($blog->contents)

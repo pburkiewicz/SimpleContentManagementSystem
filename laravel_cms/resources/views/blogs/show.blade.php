@@ -4,6 +4,7 @@
 @section('content')
 
     @includeIf("templates." . "default"  . ".head_display")
+    @includeIf("templates." . "default"  . ".title_display")
     @if($galleries)
         @includeIf("templates." . "default"  . ".image_display")
     @endif
