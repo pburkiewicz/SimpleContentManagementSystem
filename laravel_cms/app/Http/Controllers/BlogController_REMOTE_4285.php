@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Gallery;
-use App\User;
-use App\Page;
+
 class BlogController extends Controller
 {
     /**
@@ -17,16 +16,11 @@ class BlogController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index(Request $request)
+    public function index()
     {
-        $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
-        //$posts = Blog::where('page_id', $page->id)->get();
-
-        $posts = Blog::where('page_id', $page->id)->get();
-        $posts = $posts->sortByDesc("created_at");
+        $posts = Blog::all()->sortByDesc("created_at");
         // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
-        return view('blogs.index')->withBlogs($posts)->withPage($page);
-
+        return view('blogs.index')->withBlogs($posts);
     }
 
     /**
@@ -34,9 +28,10 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, string $user, string $path)
+    public function create()
     {
-        return view('blogs.create')->withPage(Page::where('page_name',$path)->first());
+
+        return view('blogs.create');
     }
 
     /**
@@ -45,7 +40,7 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,string $user, string $path)
+    public function store(Request $request)
     {
 
         $this->validate($request, [
@@ -58,7 +53,8 @@ class BlogController extends Controller
         $blog['title']= $request->title;
         $blog->contents = $request->contents;
 
-        $blog->page_id = Page::where('page_name',$path)->first()->id;
+        $blog->user_id = $request->user()->id;
+        $blog->page_path = $request->getPathInfo();
         $blog->save();
 
         $image = $request->file('image');
@@ -75,8 +71,7 @@ class BlogController extends Controller
             $gallery->blog_id=$blog->id;
             $gallery->save();
         }
-        echo $blog;
-        return redirect()->route('blog.show', ['user' => $user, 'path' => $path, 'blog' =>$blog]);
+        return redirect()->route('blogs.show', $blog);
     }
 
     /**
@@ -85,8 +80,9 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function show(string $user, string $path,Blog $blog)
+    public function show(Blog $blog)
     {
+
         $comments = $blog->find($blog->id)->comments;
         $galleries = Gallery::where('blog_id', $blog->id)->first();
         return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
@@ -98,11 +94,10 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function edit(string $user, string $path, Blog $blog)
+    public function edit(Blog $blog)
     {
         $galleries = Gallery::where('blog_id', $blog->id)->first();
-        return view('blogs.edit')->withBlog($blog)->withGalleries($galleries);
-
+        return view('blogs.edit')->withBook($blog)->withGalleries($galleries);
     }
 
     /**
@@ -112,7 +107,7 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $user, string $path, Blog $blog)
+    public function update(Request $request, Blog $blog)
     {
         $this->validate($request, [
             'title' => 'required',
@@ -120,9 +115,9 @@ class BlogController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+
         $blog['title']= $request->title;
         $blog->contents = $request->contents;
-
 //        $blog->user = $request->user();
 //        $blog->page_path = $request->getPathInfo();
         $gallery = Gallery::where('blog_id', $blog->id)->first();
@@ -150,8 +145,7 @@ class BlogController extends Controller
         }
 
         $blog->save();
-        return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
-
+        return redirect()->route('blogs.show', $blog);
     }
 
     /**
@@ -160,13 +154,11 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $user, string $path, Blog $blog)
+    public function destroy(Blog $blog)
     {
-        $images = Gallery::where('blog_id',$blog->id)->get();
-        foreach( $images as $image){
-            File::delete("uploads/" . $image->filename);
-        }
+        $image = Gallery::where('blog_id',$blog->id)->find();
+        File::delete("uploads/" . $image->filename);
         $blog->delete();
-        return redirect()->route('blog.index', ['user'=>$user, 'path'=> $path]);
+        return redirect()->route('blogs.index');
     }
 }

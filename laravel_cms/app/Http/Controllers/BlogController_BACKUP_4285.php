@@ -19,14 +19,18 @@ class BlogController extends Controller
 
     public function index(Request $request)
     {
+<<<<<<< HEAD
+
         $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
-        //$posts = Blog::where('page_id', $page->id)->get();
-
         $posts = Blog::where('page_id', $page->id)->get();
-        $posts = $posts->sortByDesc("created_at");
-        // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
-        return view('blogs.index')->withBlogs($posts)->withPage($page);
 
+
+        return view('blogs.index')->withBlogs($posts)->withPage($page);
+=======
+        $posts = Blog::all()->sortByDesc("created_at");
+        // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
+        return view('blogs.index')->withBlogs($posts);
+>>>>>>> b7dfbf094c3f346bec2493c689dd90c664e603b2
     }
 
     /**
@@ -100,9 +104,12 @@ class BlogController extends Controller
      */
     public function edit(string $user, string $path, Blog $blog)
     {
+<<<<<<< HEAD
+        return view('blogs.edit')->withBlog($blog);
+=======
         $galleries = Gallery::where('blog_id', $blog->id)->first();
-        return view('blogs.edit')->withBlog($blog)->withGalleries($galleries);
-
+        return view('blogs.edit')->withBook($blog)->withGalleries($galleries);
+>>>>>>> b7dfbf094c3f346bec2493c689dd90c664e603b2
     }
 
     /**
@@ -122,7 +129,11 @@ class BlogController extends Controller
 
         $blog['title']= $request->title;
         $blog->contents = $request->contents;
+<<<<<<< HEAD
+        $blog->save();
 
+        return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+=======
 //        $blog->user = $request->user();
 //        $blog->page_path = $request->getPathInfo();
         $gallery = Gallery::where('blog_id', $blog->id)->first();
@@ -150,8 +161,8 @@ class BlogController extends Controller
         }
 
         $blog->save();
-        return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
-
+        return redirect()->route('blogs.show', $blog);
+>>>>>>> b7dfbf094c3f346bec2493c689dd90c664e603b2
     }
 
     /**
