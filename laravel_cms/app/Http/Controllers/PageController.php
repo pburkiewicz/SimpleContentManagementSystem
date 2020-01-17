@@ -60,7 +60,7 @@ class PageController extends Controller
                 $page->page_path = "/".$request->user()->page_name."/".$request->page_name."/blog";
                 $page->save();
                 return redirect()->route('blog.index', ['user'=> $request->user()->page_name, 'path' => $page->page_name]);
-            }elseif ($page->page_type == "gallerie"){
+            }elseif ($page->page_type == "gallery"){
                 $page->page_path =  $request->user()->page_name.'/'.$request->page_name.'/gallery';
                 $page->save();
                 return redirect()->route('gallery.index', ['user'=> $request->user()->page_name, 'path' => $page->page_name]);
