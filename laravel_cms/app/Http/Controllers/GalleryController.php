@@ -69,12 +69,13 @@ class GalleryController extends Controller
         $gallery->filename = $filename;
         $gallery->blog_id=$blog->id;
         $gallery->save();
-        return redirect()->route('gallery.show', ['user' => $user, 'path' => $path, 'blog' =>$blog]);
+        echo $blog;
+        return redirect()->route('galleries.show', ['user' => $user, 'path' => $path, 'gallery' =>$blog]);
                ///
     }
 
     /**
-     * Display the specified resource.
+     * Display thbloge specified resource.
      *
      * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
