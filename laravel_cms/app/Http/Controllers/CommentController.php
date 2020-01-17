@@ -25,7 +25,7 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Blog $blog)
+    public function create(string $user, string $path, Blog $blog)
     {
         return view('comments.create')->withBlog($blog);
     }
@@ -36,7 +36,7 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Blog $blog)
+    public function store(Request $request, string $user, string $path, Blog $blog)
     {
         $this->validate($request, [
             'contents' => 'required'
@@ -48,19 +48,19 @@ class CommentController extends Controller
         $comment->contents = $request->contents;
         $comment->save();
 
-        return redirect()->route('blogs.show', $blog);
+        return redirect()->route('blog.show',  ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
     }
 
-//    /**
-//     * Display the specified resource.
-//     *
-//     * @param  \App\Comment  $comment
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function show(Comment $comment)
-//    {
-//        //
-//    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Comment  $comment
+     * @return \Illuminate\Http\Response
+     */
+    public function show( string $user, string $path,Blog $blog, Comment $comment)
+    {
+        //
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -69,14 +69,14 @@ class CommentController extends Controller
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Blog $blog, Comment $comment)
+    public function edit(string $user, string $path, Blog $blog, Comment $comment)
     {
         if( Auth::check() ) {   # user is logged in
             if (Auth::user() == $comment->user) { # user is owner of comment
                 return view('comments.edit')->withComment($comment);
             }
         }
-        return redirect()->route('blogs.show', $blog);
+        return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
 
     }
 
@@ -88,7 +88,7 @@ class CommentController extends Controller
      *  @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blog $blog, Comment $comment)
+    public function update(Request $request, string $user, string $path, Blog $blog, Comment $comment)
     {
         if( Auth::check() ) {   # user is logged in
             if (Auth::user() == $comment->user) { # user is owner of comment
@@ -97,10 +97,10 @@ class CommentController extends Controller
                 ]);
                 $comment->contents = $request->contents;
                 $comment->save();
-                return redirect()->route('blogs.show', $blog);
+                return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
             }
         }
-        return redirect()->route('blogs.show', $blog);
+        return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
     }
 
     /**
@@ -109,13 +109,13 @@ class CommentController extends Controller
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Blog $blog, Comment $comment)
+    public function destroy(string $user, string $path, Blog $blog, Comment $comment)
     {
         if( Auth::check() ) {   # user is logged in
             if (Auth::user() == $comment->user or Auth::user() == $blog->user) { # user is owner of comment
                 $comment->delete();
             }
         }
-        return redirect()->route('blogs.show', $blog);
+        return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
     }
 }

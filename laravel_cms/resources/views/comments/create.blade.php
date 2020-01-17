@@ -8,7 +8,7 @@
                     <div class="card-header">{{ __('Add a comment') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('comments.store', $blog) }}">
+                        <form method="POST" action="{{ route('comments.store', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name,'blog'=>$blog]) }}">
                             @csrf
                             <div class="form-group row">
                                 <label for="contents" class="col-md-4 col-form-label text-md-right">{{ __('Comment') }}</label>
@@ -27,7 +27,7 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Publish') }}
+                                        {{ __('Add comment') }}
                                     </button>
                                 </div>
                             </div>

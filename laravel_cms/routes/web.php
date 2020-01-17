@@ -21,13 +21,15 @@ Auth::routes();
 Route::resource('gallery','GalleryController');
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('/blogs', 'BlogController');//  [
+Route::get('{user}', 'HomeController@view');
+Route::resource('{user}/{path}/blog', 'BlogController');//  [
 //    'names' => [
 //        'create' => 'blogs.create',
 //        'edit' => 'blogs.edit',
 //        'show' => 'blogs.show',]
 //    ]);#->middleware('auth');
 
-Route::resource('/blogs/{blog}/comments', 'CommentController');
+Route::resource('/{user}/{path}/blog/{blog}/comments', 'CommentController');
 
+Route::resource('{user}/pages','PageController');
 

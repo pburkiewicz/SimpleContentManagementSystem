@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Blog extends Model
 {
 
-    public function user()
+    public function page()
     {
-        return $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo('App\Page', 'page_id', 'id');
     }
 
     public function comments()

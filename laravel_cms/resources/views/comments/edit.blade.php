@@ -9,7 +9,7 @@
                     <div class="card-header">{{ __('Edit a comment') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('comments.update', ['blog' => $comment->blog, 'comment' => $comment]) }}">
+                        <form method="POST" action="{{ route('comments.update', ['user' => $comment->blog->page->user->page_name,'path' => $comment->blog->page->page_name,'blog' => $comment->blog, 'comment' => $comment]) }}">
                             {{ csrf_field() }}
                             {{ method_field('PUT') }}
                             <div class="form-group row">
@@ -29,7 +29,7 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Publish') }}
+                                        {{ __('Edit comment') }}
                                     </button>
                                 </div>
                             </div>

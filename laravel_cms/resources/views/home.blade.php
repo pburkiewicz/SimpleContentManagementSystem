@@ -16,7 +16,8 @@
 
                     You are logged in!
                 </div>
-                <a href="{{ url('blogs') }}">Go to the posts.</a>
+                <a href="{{ route('pages.index', ['user' => $user->page_name]) }}">Manage your website</a>
+                <a href="{{ route('pages.create', $user->page_name) }}">Create a page.</a>
             </div>
         </div>
     </div>

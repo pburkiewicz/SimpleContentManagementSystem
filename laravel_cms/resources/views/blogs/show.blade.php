@@ -21,9 +21,9 @@
                 </div>
                 @endif
                 @markdown($blog->contents)
-                @if (Auth::user() == $blog->user)  {{-- Only the owner of the post is able to edit or delete it --}}
-                <a href="{{ route('blogs.edit', $blog) }}">edit</a>
-                <form method="post" action="{{ route('blogs.destroy', $blog) }}">
+                @if (Auth::user() == $blog->page->user)  {{-- Only the owner of the post is able to edit or delete it --}}
+                <a href="{{ route('blog.edit', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name, 'blog' => $blog ]) }}">edit</a>
+                <form method="post" action="{{ route('blog.destroy', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name, 'blog' => $blog ]) }}">
                     {{ method_field('DELETE') }}
                     {{ csrf_field() }}
                     <input type="submit" value="Delete">
@@ -32,11 +32,12 @@
 
 
                 <strong>Comments</strong>
-                <a href="{{ route('comments.create', $blog) }}">Add comment</a>
+                <a href="{{ route('comments.create', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name, 'blog' => $blog ]) }}">Add comment</a>
                 <ul>
                 @forelse ( $comments as  $comment)
                     <li>
-                        @if ( $comment->user_id )
+
+                        @if ( $comment->user )
                             {{--
                                 TODO...
                                         <a href="{{ $comment->user->page_path }}">{{ $comment->user->nick}}</a>
@@ -50,10 +51,10 @@
 
                         @if( Auth::check() )    {{-- user is logged in --}}
                             @if (Auth::user() == $comment->user) {{-- user is owner of comment --}}
-                                <a href="{{ route('comments.edit', [ 'blog'=>$blog, 'comment'=>$comment]) }}">edit comment</a>
+                                <a href="{{ route('comments.edit', [ 'user' => $blog->page->user->page_name,'path' => $blog->page->page_name, 'blog'=>$blog, 'comment'=>$comment]) }}">edit comment</a>
                             @endif
                             @if (Auth::user() == $comment->user or Auth::user() == $blog->user)  {{-- owner of the comment and owner of the post are able to delete a comment --}}
-                                <form method="post" action="{{ route('comments.destroy', ['blog' => $blog, 'comment' => $comment]) }}">
+                                <form method="post" action="{{ route('comments.destroy', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name,'blog' => $blog, 'comment' => $comment]) }}">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
                                     <input type="submit" value="Delete">

@@ -17,9 +17,9 @@ class CreateBlogsTable extends Migration
             $table->bigIncrements('id');
             $table->text('title');  # title of article
             $table->text('contents');    # article
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); # blog owner
-            $table->string('page_path');   # url of page that contains a article
+            $table->unsignedBigInteger('page_id');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade'); # page contains a blog
+            //$table->string('page_path');   # url of page that contains a article
             $table->timestamps();
         });
     }
