@@ -18,8 +18,13 @@ class GalleryController extends Controller
     {
         $galleries = Gallery::all();
         return view('galleries.index_temp')->withGalleries($galleries);
-        // some redirection - we can't show all galleries from multiple users.
-        // or user is 'above' galleries, and them are only his subpages.
+        $gallery = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
+        //$posts = Blog::where('page_id', $page->id)->get();
+
+        $gallery = Gallery::where('page_id', $page->id)->get();
+        $gallery = $posts->sortByDesc("created_at");
+        // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
+        return view('galleries.index_temp')->withBlogs($posts)->withPage($page);
     }
 
     /**
