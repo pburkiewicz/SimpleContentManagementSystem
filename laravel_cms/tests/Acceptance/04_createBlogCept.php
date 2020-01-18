@@ -21,15 +21,18 @@ $I->click("Create new...");
 $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog/create");
 $I->fillField('title', 'tytul_posta');
 $I->fillField('contents', 'tresc posta: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et pulvinar ex. Pellentesque semper augue nisl, vel porttitor erat dictum. ');
-//$I->fillField('image', 'lwy.jpg');
+
+//change path to lwy.jpg
+
+$I->fillField('image', '/home/student/php_2019_laravel_cms/laravel_cms/tests/Acceptance/lwy.jpg');
 $I->fillField("description",'to jest obrazek przedstawiajacy lwy');
 $I->click("Publish");
 
 $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog/1");
 $I->see("tytul_posta");
 $I->see('tresc posta: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et pulvinar ex. Pellentesque semper augue nisl, vel porttitor erat dictum. ');
-//$I->see('lwy.jpg');
-//$I->see('to jest obrazek przedstawiajacy lwy');
+$I->seeElement("img");
+$I->see('to jest obrazek przedstawiajacy lwy');
 $I->seeLink('edit');
 //$I->see('Delete');
 $I->see("Comments");
