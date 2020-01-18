@@ -24,7 +24,7 @@
         <form method="post" action="{{ route('comments.destroy', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name,'blog' => $blog, 'comment' => $comment]) }}">
             {{ method_field('DELETE') }}
             {{ csrf_field() }}
-            <input type="submit" value="Delete">
+            <input id="delete_comment" type="submit" value="Delete">
         </form>
         @endif
         @endif
