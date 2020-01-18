@@ -38,3 +38,5 @@ $I->click("Edit comment");
 $I->seeInCurrentUrl("/john_doe/tytul_strony/blog/1");
 $I->see("zmieniony komentarz");
 $I->dontSee("komentarz pod postem od zalogowanego uzytkownika");
+$I->click("#delete_comment");
+$I->dontSee("zmieniony komentarz");
