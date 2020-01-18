@@ -13,6 +13,6 @@
 @endif
     {{ method_field('DELETE') }}
     {{ csrf_field() }}
-    <input type="submit" value="Delete">
+    <input id="delete_post" type="submit" value="Delete">
 </form>
 @endif
