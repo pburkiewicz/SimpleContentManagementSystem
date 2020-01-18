@@ -6,7 +6,7 @@ $I->amOnPage('/register');
 
 $I->seeCurrentUrlEquals('/register');
 
-$I->wantTo('check if any field can be left blank');
+$I->amGoingTo('check if any field can be left blank');
 
 $I->click('#register');
 $I->dontSee('You are logged in!');
