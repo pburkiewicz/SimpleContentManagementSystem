@@ -23,6 +23,8 @@ class CreateGalleriesTable extends Migration
             $table->string('filename')->nullable();
             $table->string('mime')->nullable();
             $table->string('original_filename')->nullable();
+            $table->unsignedBigInteger('page_id');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade'); # page contains a blog
             $table->timestamps();
         });
     }

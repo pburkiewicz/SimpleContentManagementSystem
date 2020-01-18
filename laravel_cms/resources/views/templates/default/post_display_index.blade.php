@@ -9,7 +9,11 @@
                     <li>
                         @includeIf("templates." . "default"  . ".title_display")
                         <br>
-                        <a href ="{{ route('blog.show', [ 'blog' => $blog, 'user' => $page->user->page_name, 'path' => $page->page_name , 1]) }}"><strong>show</strong></a>
+                        @if( $blog->page->page_type == "blog"):
+                            <a href ="{{ route('blog.show', [ 'blog' => $blog, 'user' => $page->user->page_name, 'path' => $page->page_name ]) }}"><strong>show</strong></a>
+                        @elseif( $blog->page->page_type == "gallery"):
+                            <a href ="{{ route('gallery.show', ['gallery' =>$blog->id, 'user' => $page->user->page_name, 'path' => $page->page_name]) }}"><strong>show</strong></a>
+                        @endif
                         <div>
                             @if($galleries=\App\Gallery::where('blog_id', $blog->id)->first())
                                 @includeIf("templates." . "default"  . ".image_display")
