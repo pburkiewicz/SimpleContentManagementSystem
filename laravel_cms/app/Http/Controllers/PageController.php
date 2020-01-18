@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Coworker;
 use App\Page;
 use App\User;
 use Illuminate\Http\Request;
@@ -20,8 +21,12 @@ class PageController extends Controller
         $User =User::where('page_name', $user)->first();
 
         if( $User == Auth::user()) {
+            $coworkers = Coworker::where('owner_id',$User->id);
+            $coworkers = $coworkers->get();
+            $copages = Coworker::where('user_id', $User->id)->get();
+
             $pages = Page::where('user_id', $User->id)->get();
-            return view('pages.index')->withUser($User)->withPages($pages);
+            return view('pages.index')->withUser($User)->withPages($pages)->withCoworkers($coworkers)->withCopages($copages);
         }
         return view('home')->withUser(Auth::user());
     }

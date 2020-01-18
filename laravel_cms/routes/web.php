@@ -32,4 +32,5 @@ Route::resource('{user}/{path}/blog', 'BlogController');//  [
 Route::resource('/{user}/{path}/blog/{blog}/comments', 'CommentController');
 
 Route::resource('{user}/pages','PageController');
+Route::resource('{user}/{page_id}/coworker','CoworkerController');
 
