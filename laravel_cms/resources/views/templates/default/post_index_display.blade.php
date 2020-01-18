@@ -15,7 +15,7 @@
                                                     @includeIf("templates." . "default"  . ".image_display")
                                                 @endif
                                             <p>
-                                                    @markdown($blog>contents)
+                                                    @markdown($blog->contents)
                                                 </p>
                                         </div>
                                 </li>

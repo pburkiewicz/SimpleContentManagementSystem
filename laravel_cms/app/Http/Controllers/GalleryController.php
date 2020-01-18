@@ -122,7 +122,7 @@ class GalleryController extends Controller
         $blog['title']= $request->title;
 
         $image = $request->file('image');
-
+        echo $image;
 
         $extension = $image->getClientOriginalExtension();
         $filename = time() . '.' . $image->getFilename() . '.' . $extension;
@@ -137,7 +137,7 @@ class GalleryController extends Controller
 
 
         $blog->save();
-        return redirect()->route('gallery.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+        //return redirect()->route('gallery.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
     }
 
     /**
