@@ -116,10 +116,8 @@ class GalleryController extends Controller
            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'title' => 'required',
         ]);
-        echo $blog;
 
         $gallery = Gallery::where('blog_id', $blog)->first();
-        echo $gallery;
         $blog = Blog::where('id', $blog)->first();
         $blog['title']= $request->title;
 
