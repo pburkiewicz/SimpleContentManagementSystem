@@ -20,7 +20,7 @@ $I->click("Create new...");
 
 $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog/create");
 $I->fillField('title', 'tytul_posta');
-$I->fillField('contents', 'tresc posta: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et pulvinar ex. Pellentesque semper augue nisl, vel porttitor erat dictum. ');
+$I->fillField('contents', 'tresc posta: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et pulvinar ex. Pellentesque semper augue nisl, vel porttitor erat dictum.');
 
 //change path to lwy.jpg
 
@@ -30,8 +30,9 @@ $I->click("Publish");
 
 $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog/1");
 $I->see("tytul_posta");
-$I->see('tresc posta: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et pulvinar ex. Pellentesque semper augue nisl, vel porttitor erat dictum. ');
+$I->see('tresc posta: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et pulvinar ex. Pellentesque semper augue nisl, vel porttitor erat dictum.');
 $I->seeElement("img");
+$I->seeInSource('alt="lwy.jpg"');
 $I->see('to jest obrazek przedstawiajacy lwy');
 $I->seeLink('edit');
 //$I->see('Delete');
