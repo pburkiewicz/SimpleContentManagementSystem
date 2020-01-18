@@ -14,4 +14,8 @@ class Page extends Model
     {
         return $this->hasMany('App\Blog');
     }
+    public function gallery()
+    {
+        return $this->hasMany('App\Gallery');
+    }
 }

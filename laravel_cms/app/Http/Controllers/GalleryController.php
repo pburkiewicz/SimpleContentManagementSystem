@@ -68,9 +68,10 @@ class GalleryController extends Controller
         $gallery->original_filename = $image->getClientOriginalName();
         $gallery->filename = $filename;
         $gallery->blog_id=$blog->id;
+        $gallery->page_id=$blog->page_id;
         $gallery->save();
         echo $blog;
-        return redirect()->route('galleries.show', ['user' => $user, 'path' => $path, 'gallery' =>$blog]);
+        return redirect()->route('gallery.show', ['user' => $user, 'path' => $path, 'gallery' =>$blog]);
                ///
     }
 
@@ -80,11 +81,12 @@ class GalleryController extends Controller
      * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function show(string $user, string $path,Blog $blog)
+    public function show(string $user, string $path, string $blog)
     {
-        $comments = $blog->find($blog->id)->comments;
-        $galleries = Gallery::where('blog_id', $blog->id)->first();
-        return view('galleries.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
+        //$comments = $blog->find($blog->id)->comments;
+        echo $galleries = Gallery::where('blog_id', $blog)->first();
+
+        return view('galleries.show')->withBlog($galleries)->withGalleries($galleries);// ->withComments($comments)
     }
 
     /**
@@ -93,10 +95,11 @@ class GalleryController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function edit(string $user, string $path, Blog $blog)
+    public function edit(string $user, string $path, string $blog)
     {
-        $galleries = Gallery::where('blog_id', $blog->id)->first();
-        return view('galleries.edit')->withBlog($blog)->withGalleries($galleries);
+        $galleries = Gallery::where('id', $blog)->first();
+        $blog = Blog::where('id', $galleries->blog_id)->first();
+       return view('galleries.edit')->withBlog($blog)->withGalleries($galleries);
 
     }
 
@@ -107,15 +110,19 @@ class GalleryController extends Controller
      * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $user, string $path, Blog $blog)
+    public function update(Request $request, string $user, string $path, string $blog)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+           // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'title' => 'required',
         ]);
+        echo $blog;
 
+        $gallery = Gallery::where('blog_id', $blog)->first();
+        echo $gallery;
+        $blog = Blog::where('id', $blog)->first();
         $blog['title']= $request->title;
-        $gallery = Gallery::where('blog_id', $blog->id)->first();
+
         $image = $request->file('image');
 
 
@@ -141,13 +148,15 @@ class GalleryController extends Controller
      * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $user, string $path, Blog $blog)
+    public function destroy(string $user, string $path, string $blog)
     {
-        $images = Gallery::where('blog_id',$blog->id)->get();
+        $images = Gallery::where('id',$blog)->get();
+        echo $images;
+        echo $images[0]->blog_id;
         foreach( $images as $image){
             File::delete("uploads/" . $image->filename);
         }
-        $blog->delete();
+        Blog::where('id',$images[0]->blog_id)->delete();
         return redirect()->route('gallery.index', ['user'=>$user, 'path'=> $path]);
     }
 }

@@ -20,11 +20,11 @@ class BlogController extends Controller
 public function index(Request $request)
 {
 
-$page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
-$posts = Blog::where('page_id', $page->id)->get();
-//dd($page,$page->id,$posts,Blog::where('page_id', $page->id)->get(), Blog::all());
+    $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
+    $posts = Blog::where('page_id', $page->id)->get();
+    //dd($page,$page->id,$posts,Blog::where('page_id', $page->id)->get(), Blog::all());
 
-return view('blogs.index')->withBlogs($posts)->withPage($page);
+    return view('blogs.index')->withBlogs($posts)->withPage($page);
 }
 
 /**
@@ -35,7 +35,7 @@ return view('blogs.index')->withBlogs($posts)->withPage($page);
 public function create(Request $request, string $user, string $path)
 {
 
-return view('blogs.create')->withPage(Page::where('page_name',$path)->first());
+    return view('blogs.create')->withPage(Page::where('page_name',$path)->first());
 }
 
 /**
@@ -47,35 +47,35 @@ return view('blogs.create')->withPage(Page::where('page_name',$path)->first());
 public function store(Request $request,string $user, string $path)
 {
 
-$this->validate($request, [
-'title' => 'required',
-'contents' => 'required',
-'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-]);
+    $this->validate($request, [
+    'title' => 'required',
+    'contents' => 'required',
+    'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-$blog = new Blog();
-$blog['title']= $request->title;
-$blog->contents = $request->contents;
+    $blog = new Blog();
+    $blog['title']= $request->title;
+    $blog->contents = $request->contents;
 
-$blog->page_id = Page::where('page_name',$path)->first()->id;
-$blog->save();
+    $blog->page_id = Page::where('page_name',$path)->first()->id;
+    $blog->save();
 
-$image = $request->file('image');
-if($image) {
-$extension = $image->getClientOriginalExtension();
-$filename = time() . '.' . $image->getFilename() . '.' . $extension;
-Storage::disk('public')->put($filename, File::get($image));
+    $image = $request->file('image');
+    if($image) {
+        $extension = $image->getClientOriginalExtension();
+        $filename = time() . '.' . $image->getFilename() . '.' . $extension;
+        Storage::disk('public')->put($filename, File::get($image));
 
-$gallery = new Gallery;
-$gallery->description = $request->description;
-$gallery->mime = $image->getClientMimeType();
-$gallery->original_filename = $image->getClientOriginalName();
-$gallery->filename = $filename;
-$gallery->blog_id=$blog->id;
-$gallery->save();
-}
-echo $blog;
-return redirect()->route('blog.show', ['user' => $user, 'path' => $path, 'blog' =>$blog]);
+        $gallery = new Gallery;
+        $gallery->description = $request->description;
+        $gallery->mime = $image->getClientMimeType();
+        $gallery->original_filename = $image->getClientOriginalName();
+        $gallery->filename = $filename;
+        $gallery->blog_id=$blog->id;
+        $gallery->page_id = $blog->page_id;
+        $gallery->save();
+    }
+    return redirect()->route('blog.show', ['user' => $user, 'path' => $path, 'blog' =>$blog]);
 }
 
 /**
@@ -86,9 +86,9 @@ return redirect()->route('blog.show', ['user' => $user, 'path' => $path, 'blog' 
 */
 public function show(string $user, string $path,Blog $blog)
 {
-$comments = $blog->find($blog->id)->comments;
-$galleries = Gallery::where('blog_id', $blog->id)->first();
-return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
+    $comments = $blog->find($blog->id)->comments;
+    $galleries = Gallery::where('blog_id', $blog->id)->first();
+    return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
 }
 
 /**
@@ -100,7 +100,7 @@ return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleri
 public function edit(string $user, string $path, Blog $blog)
 {
     $galleries = Gallery::where('blog_id', $blog->id)->first();
-return view('blogs.edit')->withBlog($blog)->withGalleries($galleries);
+    return view('blogs.edit')->withBlog($blog)->withGalleries($galleries);
 }
 
 /**
@@ -112,16 +112,16 @@ return view('blogs.edit')->withBlog($blog)->withGalleries($galleries);
 */
 public function update(Request $request, string $user, string $path, Blog $blog)
 {
-$this->validate($request, [
-'title' => 'required',
-'contents' => 'required'
-]);
+    $this->validate($request, [
+    'title' => 'required',
+    'contents' => 'required'
+    ]);
 
-$blog['title']= $request->title;
-$blog->contents = $request->contents;
-$blog->save();
+    $blog['title']= $request->title;
+    $blog->contents = $request->contents;
+    $blog->save();
 
-return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+    return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
 }
 
 /**
@@ -132,11 +132,11 @@ return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$
 */
 public function destroy(string $user, string $path, Blog $blog)
 {
-$images = Gallery::where('blog_id',$blog->id)->get();
-foreach( $images as $image){
-File::delete("uploads/" . $image->filename);
-}
-$blog->delete();
-return redirect()->route('blog.index', ['user'=>$user, 'path'=> $path]);
-}
+    $images = Gallery::where('blog_id',$blog->id)->get();
+    foreach( $images as $image){
+        File::delete("uploads/" . $image->filename);
+    }
+    $blog->delete();
+    return redirect()->route('blog.index', ['user'=>$user, 'path'=> $path]);
+    }
 }
