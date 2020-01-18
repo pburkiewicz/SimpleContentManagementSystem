@@ -3,7 +3,7 @@
 @if( $blog->page->page_type == "blog")
 <a href ="{{ route('blog.edit', [ 'blog' => $blog, 'user' => $blog->page->user->page_name, 'path' => $blog->page->page_name ]) }}"><strong>edit</strong></a>
 @elseif( $blog->page->page_type == "gallery")
-{{--<a href ="{{ route('gallery.edit', ['gallery' =>$blog->id, 'user' => $blog->page->user->page_name, 'path' => $blog->page->page_name]) }}"><strong>edit</strong></a>--}}
+<a href ="{{ route('gallery.edit', ['gallery' =>$blog->id, 'user' => $blog->page->user->page_name, 'path' => $blog->page->page_name]) }}"><strong>edit</strong></a>
 @endif
 
 @if( $blog->page->page_type == "blog"):

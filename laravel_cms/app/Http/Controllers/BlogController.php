@@ -113,9 +113,27 @@ public function edit(string $user, string $path, Blog $blog)
 public function update(Request $request, string $user, string $path, Blog $blog)
 {
     $this->validate($request, [
-    'title' => 'required',
-    'contents' => 'required'
+        'title' => 'required',
+        'contents' => 'required',
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
+    $gallery = Gallery::where('blog_id', $blog->id)->first();
+    $image = $request->file('image');
+
+    if ($image) {
+        $extension = $image->getClientOriginalExtension();
+
+        $filename = time() . '.' . $image->getFilename() . '.' . $extension;
+        Storage::disk('public')->put($filename, File::get($image));
+        File::delete("uploads/" . $gallery->filename);
+        $gallery->mime = $image->getClientMimeType();
+        $gallery->original_filename = $image->getClientOriginalName();
+        $gallery->filename = $filename;
+    }
+    $gallery->blog_id=$blog->id;
+    $gallery->description = $request->description;
+    $gallery->save();
+
 
     $blog['title']= $request->title;
     $blog->contents = $request->contents;

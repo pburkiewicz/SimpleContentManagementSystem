@@ -45,11 +45,9 @@ class GalleryController extends Controller
      */
     public function store(Request $request,string $user, string $path)
     {
-               $request->validate([
+        $request->validate([
         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'title' => 'required',
-
-
     ]);
 
         $blog = new Blog();
@@ -70,8 +68,7 @@ class GalleryController extends Controller
         $gallery->blog_id=$blog->id;
         $gallery->page_id=$blog->page_id;
         $gallery->save();
-        echo $blog;
-        return redirect()->route('gallery.show', ['user' => $user, 'path' => $path, 'gallery' =>$blog]);
+        return redirect()->route('gallery.show', ['user' => $user, 'path' => $path, 'gallery' =>$gallery]);
                ///
     }
 
@@ -84,9 +81,9 @@ class GalleryController extends Controller
     public function show(string $user, string $path, string $blog)
     {
         //$comments = $blog->find($blog->id)->comments;
-        echo $galleries = Gallery::where('blog_id', $blog)->first();
-
-        return view('galleries.show')->withBlog($galleries)->withGalleries($galleries);// ->withComments($comments)
+        $galleries = Gallery::where('id', $blog)->first();
+        $blog = Blog::where('id', $galleries->blog_id)->first();
+        return view('galleries.show')->withBlog($blog)->withGalleries($galleries);// ->withComments($comments)
     }
 
     /**
@@ -97,9 +94,11 @@ class GalleryController extends Controller
      */
     public function edit(string $user, string $path, string $blog)
     {
+        echo $blog;
         $galleries = Gallery::where('id', $blog)->first();
+        echo $galleries;
         $blog = Blog::where('id', $galleries->blog_id)->first();
-       return view('galleries.edit')->withBlog($blog)->withGalleries($galleries);
+        return view('galleries.edit')->withBlog($blog)->withGalleries($galleries);
 
     }
 
@@ -113,31 +112,33 @@ class GalleryController extends Controller
     public function update(Request $request, string $user, string $path, string $blog)
     {
         $request->validate([
-           // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'title' => 'required',
         ]);
 
-        $gallery = Gallery::where('blog_id', $blog)->first();
-        $blog = Blog::where('id', $blog)->first();
-        $blog['title']= $request->title;
+        $gallery = Gallery::where('id', $blog)->first();
+        $blog = Blog::where('id', $gallery->blog_id)->first();
+        $blog['title'] = $request->title;
 
         $image = $request->file('image');
-        echo $image;
 
-        $extension = $image->getClientOriginalExtension();
-        $filename = time() . '.' . $image->getFilename() . '.' . $extension;
-        Storage::disk('public')->put($filename, File::get($image));
-        File::delete("uploads/" . $gallery->filename);
-        $gallery->mime = $image->getClientMimeType();
-        $gallery->original_filename = $image->getClientOriginalName();
-        $gallery->filename = $filename;
+        if ($image) {
+            $extension = $image->getClientOriginalExtension();
+
+            $filename = time() . '.' . $image->getFilename() . '.' . $extension;
+            Storage::disk('public')->put($filename, File::get($image));
+            File::delete("uploads/" . $gallery->filename);
+            $gallery->mime = $image->getClientMimeType();
+            $gallery->original_filename = $image->getClientOriginalName();
+            $gallery->filename = $filename;
+        }
         $gallery->blog_id=$blog->id;
         $gallery->description = $request->description;
         $gallery->save();
 
 
         $blog->save();
-        //return redirect()->route('gallery.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+        return redirect()->route('gallery.show', ['user'=>$user, 'path'=> $path, 'gallery' =>$blog]);
     }
 
     /**
@@ -149,8 +150,7 @@ class GalleryController extends Controller
     public function destroy(string $user, string $path, string $blog)
     {
         $images = Gallery::where('id',$blog)->get();
-        echo $images;
-        echo $images[0]->blog_id;
+
         foreach( $images as $image){
             File::delete("uploads/" . $image->filename);
         }

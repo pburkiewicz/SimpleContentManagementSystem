@@ -15,7 +15,7 @@
                                 <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+                                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ $blog->title }}" required autocomplete="title" autofocus>
 
                                     @error('title')
                                     <span class="invalid-feedback" role="alert">
@@ -25,11 +25,18 @@
                                 </div>
                             </div>
 
+                            @if($galleries)
+                                <label for="file" class="col-md-4 col-form-label text-md-right">{{ __('Current image') }}</label>
+                                <div class="card">
+                                    <img class="card-img-top" src="{{url('uploads/'.$galleries->filename)}}" alt="{{$galleries->original_filename}}">
+                                </div>
+                            @endif
+
                             <div class="form-group row">
-                                <label for="file" class="col-md-4 col-form-label text-md-right">{{ __('Image') }}</label>
+                                <label for="file" class="col-md-4 col-form-label text-md-right">{{ __('Override Image') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image" value="{{old("image")}}" autofocus>
+                                    <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image" autofocus>
 
                                     @error('image')
                                     <span class="invalid-feedback" role="alert">
@@ -43,7 +50,7 @@
                                 <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Image Description') }}</label>
 
                                 <div class="col-md-6">
-                                    <textarea id="description"  class="form-control " name="description" autocomplete="description" autofocus>{{ old('description') }}</textarea>
+                                    <textarea id="description"  class="form-control " name="description" autocomplete="description" autofocus>@if($galleries){{ $galleries->description}}@endif</textarea>
 
                                 </div>
                             </div>
