@@ -68,7 +68,7 @@ class GalleryController extends Controller
         $gallery->blog_id=$blog->id;
         $gallery->page_id=$blog->page_id;
         $gallery->save();
-        return redirect()->route('gallery.show', ['user' => $user, 'path' => $path, 'gallery' =>$gallery]);
+        return redirect()->route('gallery.show', ['user' => $user, 'path' => $path, 'gallery' =>$blog]);
                ///
     }
 
@@ -81,8 +81,9 @@ class GalleryController extends Controller
     public function show(string $user, string $path, string $blog)
     {
         //$comments = $blog->find($blog->id)->comments;
-        $galleries = Gallery::where('id', $blog)->first();
-        $blog = Blog::where('id', $galleries->blog_id)->first();
+        $blog = Blog::where('id', $blog)->first();
+        $galleries = Gallery::where('blog_id', $blog->id)->first();
+//        $blog = Blog::where('id', $galleries->blog_id)->first();
         return view('galleries.show')->withBlog($blog)->withGalleries($galleries);// ->withComments($comments)
     }
 
@@ -94,10 +95,9 @@ class GalleryController extends Controller
      */
     public function edit(string $user, string $path, string $blog)
     {
-        echo $blog;
-        $galleries = Gallery::where('id', $blog)->first();
-        echo $galleries;
-        $blog = Blog::where('id', $galleries->blog_id)->first();
+        $blog = Blog::where('id', $blog)->first();
+        $galleries = Gallery::where('blog_id', $blog->id)->first();
+
         return view('galleries.edit')->withBlog($blog)->withGalleries($galleries);
 
     }
@@ -116,8 +116,8 @@ class GalleryController extends Controller
             'title' => 'required',
         ]);
 
-        $gallery = Gallery::where('id', $blog)->first();
-        $blog = Blog::where('id', $gallery->blog_id)->first();
+        $blog = Blog::where('id', $blog)->first();
+        $gallery = Gallery::where('blog_id', $blog->id)->first();
         $blog['title'] = $request->title;
 
         $image = $request->file('image');
@@ -149,12 +149,13 @@ class GalleryController extends Controller
      */
     public function destroy(string $user, string $path, string $blog)
     {
-        $images = Gallery::where('id',$blog)->get();
+        $images = Gallery::where('blog_id',$blog)->get();
+        $temp = $images[0]->blog_id;
 
         foreach( $images as $image){
             File::delete("uploads/" . $image->filename);
         }
-        Blog::where('id',$images[0]->blog_id)->delete();
+        Blog::where('id',$temp)->delete();
         return redirect()->route('gallery.index', ['user'=>$user, 'path'=> $path]);
     }
 }
