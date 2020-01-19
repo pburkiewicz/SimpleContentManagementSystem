@@ -48,7 +48,7 @@ class CommentController extends Controller
         $comment->contents = $request->contents;
         $comment->save();
 
-        return redirect()->route('blog.show',  ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+       # return redirect()->route('blog.show',  ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
     }
 
     /**

@@ -5,12 +5,8 @@
         <li>
 
             @if ( $comment->user )
-                {{--
-                    TODO...
-                            <a href="{{ $comment->user->page_path }}">{{ $comment->user->nick}}</a>
-                            url to the page of user
-                --}}
-                {{ $comment->user->nick}}
+                <a href="/{{ $comment->user->page_name }}">{{ $comment->user->nick}}</a>
+                {{-- url to user's main page --}}
             @else Anonymous user
             @endif
             {{ $comment->created_at }}</li>
