@@ -9,58 +9,67 @@ $I->click('#login');
 
 $I->click('Create a page.');
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
-//$I->fillField('page_type', 'blog');
 $I->selectOption('page_type',"gallery");
 
 $I->click("Add page");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', 'spacja spacja');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', '*+-%=:;');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', '\\/');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', "''\"\"");
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', '?!.,');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', '$@');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', '(){}[]');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', 'tytul_strony');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name has already been taken.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', 'john_doe');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 $I->see("The page name has already been taken.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
 $I->fillField('page_name', 'tytul_galerii');
+$I->selectOption('page_type',"gallery");
 $I->click("Add page");
 
 $I->seeCurrentUrlEquals("/john_doe/tytul_galerii/gallery");
