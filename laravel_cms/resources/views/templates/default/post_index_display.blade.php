@@ -1,10 +1,9 @@
 <h2>Posts:</h2>
 
-
 <a href="{{ url($page->page_path.'/create') }}">Create new...</a>
 
-
 <ul>
+
     @forelse($blogs as $blog)
         <li>
             @includeIf("templates." . "default"  . ".title_display")
@@ -26,3 +25,4 @@
         <p>No posts.</p>
     @endforelse
 </ul>
+{{ $blogs->render() }}

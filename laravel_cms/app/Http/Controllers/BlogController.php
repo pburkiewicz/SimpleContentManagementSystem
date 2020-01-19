@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Blog;
+use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Gallery;
 use App\User;
 use App\Page;
+
+
 class BlogController extends Controller
 {
 /**
@@ -19,11 +22,8 @@ class BlogController extends Controller
 
 public function index(Request $request)
 {
-
     $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
-    $posts = Blog::where('page_id', $page->id)->get();
-    //dd($page,$page->id,$posts,Blog::where('page_id', $page->id)->get(), Blog::all());
-
+    $posts = Blog::where('page_id', $page->id)->with('page')->orderBy('created_at', 'desc')->paginate(10);
     return view('blogs.index')->withBlogs($posts)->withPage($page);
 }
 
@@ -34,9 +34,10 @@ public function index(Request $request)
 */
 public function create(Request $request, string $user, string $path)
 {
-
     return view('blogs.create')->withPage(Page::where('page_name',$path)->first());
 }
+
+
 
 /**
 * Store a newly created resource in storage.
@@ -46,7 +47,6 @@ public function create(Request $request, string $user, string $path)
 */
 public function store(Request $request,string $user, string $path)
 {
-
     $this->validate($request, [
     'title' => 'required',
     'contents' => 'required',
@@ -86,7 +86,7 @@ public function store(Request $request,string $user, string $path)
 */
 public function show(string $user, string $path,Blog $blog)
 {
-    $comments = $blog->find($blog->id)->comments;
+    $comments = Comment::where('blog_id', $blog->id)->orderBy('created_at', 'desc')->paginate(10);//$blog->find($blog->id)->comments;
     $galleries = Gallery::where('blog_id', $blog->id)->first();
     return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries);
 }

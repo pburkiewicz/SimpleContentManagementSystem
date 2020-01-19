@@ -32,3 +32,4 @@
         <p>No comments.</p>
     @endforelse
 </ul>
+{{ $comments->render() }}

@@ -18,11 +18,8 @@ class GalleryController extends Controller
      */
     public function index(Request $request)
     {
-        $page=Page::all();
         $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
-        //$posts = Blog::where('page_id', $page->id)->get();
-        $posts = Blog::where('page_id', $page->id)->get();
-        $posts = $posts->sortByDesc("created_at");
+        $posts = Blog::where('page_id', $page->id)->with('page')->orderBy('created_at', 'desc')->paginate(10);
         // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
         return view('galleries.index')->withBlogs($posts)->withPage($page);
     }
