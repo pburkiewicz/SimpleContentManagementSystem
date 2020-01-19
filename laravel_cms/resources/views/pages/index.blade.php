@@ -40,7 +40,7 @@
                         @php
                         $page= App\Page::where('id',$page_temp->page_id)->first()
                         @endphp
-                        <h2><strong><a href ="{{ url($page->page_path) }}">{{ $page->page_name }} -  {{ $page->page_type }}</a></strong></h2>
+                        <h2><strong><a href ="{{ url($page->page_path) }}">{{ $page->page_name }} -  {{ $page->page_type }}</a></strong></h2>owner: {{\App\User::find($page->user_id)->nick}}
                     </li>
                 @empty
                     <p>No pages.</p>
