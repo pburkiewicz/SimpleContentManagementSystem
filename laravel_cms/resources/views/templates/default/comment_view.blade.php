@@ -10,13 +10,13 @@
             @else Anonymous user
             @endif
             {{ $comment->created_at }}</li>
-        {{ $comment->contents }}
+        {{ $comment->contents }} <br>
 
         @if( Auth::check() )    {{-- user is logged in --}}
         @if (Auth::user() == $comment->user) {{-- user is owner of comment --}}
         <a href="{{ route('comments.edit', [ 'user' => $blog->page->user->page_name,'path' => $blog->page->page_name, 'blog'=>$blog, 'comment'=>$comment]) }}">edit comment</a>
         @endif
-        @if (Auth::user() == $comment->user or Auth::user() == $blog->user)  {{-- owner of the comment and owner of the post are able to delete a comment --}}
+        @if (Auth::user() == $comment->user or Auth::user() == $blog->user or Auth::user()->id == $coworkers->user_id)  {{-- owner of the comment and owner of the post are able to delete a comment --}}
         <form method="post" action="{{ route('comments.destroy', ['user' => $blog->page->user->page_name,'path' => $blog->page->page_name,'blog' => $blog, 'comment' => $comment]) }}">
             {{ method_field('DELETE') }}
             {{ csrf_field() }}

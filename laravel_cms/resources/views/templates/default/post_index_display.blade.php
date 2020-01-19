@@ -1,7 +1,7 @@
 <h2>Posts:</h2>
-
-<a href="{{ url($page->page_path.'/create') }}">Create new...</a>
-
+@if($user && ($page->user_id==$user->id || $coworkers->user_id==$user->id))
+    <a href="{{ url($page->page_path.'/create') }}">Create new...</a>
+@endif
 <ul>
 
     @forelse($blogs as $blog)
