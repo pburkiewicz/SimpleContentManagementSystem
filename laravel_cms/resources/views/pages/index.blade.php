@@ -17,7 +17,7 @@
                         <ul>
                         @forelse($coworkers->where('page_id',$page->id) as $writer_data)
 
-                                <li>{{\App\User::find($writer_data->user_id)->first()->nick}}
+                                <li>{{\App\User::find($writer_data->user_id)->nick}}
                                     <form method="post" action="{{ route('coworker.destroy', ['user' => $user->page_name, 'page_id' => $page->page_name, 'coworker' => $writer_data ]) }}">
                                         {{ method_field('DELETE') }}
                                         {{ csrf_field() }}
