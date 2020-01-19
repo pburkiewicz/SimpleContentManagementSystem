@@ -9,9 +9,7 @@ $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog/1/comments/create");
 $I->fillField("#contents","komentarz pod postem od anonimowego uzytkownika");
 $I->click("Add comment");
 
-$I->seeInCurrentUrl("/john_doe/tytul_strony/blog/1");
-$I->click('Login');
-$I->seeCurrentUrlEquals('/login');
+$I->amOnPage('/login');
 $I->fillField('email', 'john.doe@gmail.com');
 $I->fillField('password', '12345678');
 $I->click('#login');
@@ -37,6 +35,7 @@ $I->fillField("#contents","zmieniony komentarz");
 $I->click("Edit comment");
 $I->seeInCurrentUrl("/john_doe/tytul_strony/blog/1");
 $I->see("zmieniony komentarz");
+$I->seelink("johny","/john_doe");
 $I->dontSee("komentarz pod postem od zalogowanego uzytkownika");
 $I->click("#delete_comment");
 $I->dontSee("zmieniony komentarz");
