@@ -2,7 +2,7 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('edit and delete post');
 
-$I->amOnPage("/john_doe/tytul_strony/gallery/2");
+$I->amOnPage("/john_doe/tytul_galerii/gallery/2");
 $I->dontSeeLink('edit');
 $I->dontSeeElement("#delete_post");
 
@@ -10,10 +10,11 @@ $I->amOnPage('/login');
 $I->fillField('email', 'john.doe@gmail.com');
 $I->fillField('password', '12345678');
 $I->click('#login');
-$I->amOnPage("/john_doe/tytul_strony/gallery/2");
+$I->amOnPage("/john_doe/tytul_galerii/gallery/2");
 
 $I->click("edit");
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/gallery/2/edit");
+//$I->seeLink("edit","/john_doe/tytul_galerii/gallery/2/edit");
+$I->seeCurrentUrlEquals("/john_doe/tytul_galerii/gallery/2/edit");
 $I->fillField('title', 'tytul2');
 
 //change path to dzik.jpg
@@ -22,7 +23,7 @@ $I->fillField('image', '/home/student/php_2019_laravel_cms/laravel_cms/tests/Acc
 $I->fillField("description",'to jest dzik');
 $I->click("Publish");
 
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/gallery/2");
+$I->seeCurrentUrlEquals("/john_doe/tytul_galerii/gallery/2");
 $I->dontSee("tytul_posta");
 $I->seeElement("img");
 $I->dontSeeInSource('alt="lwy.jpg"');
@@ -34,6 +35,5 @@ $I->seeInSource('alt="dzik.jpg"');
 $I->see('to jest dzik');
 
 $I->click("#delete_post");
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/gallery");
+$I->seeCurrentUrlEquals("/john_doe/tytul_galerii/gallery");
 $I->see("No posts.");
-

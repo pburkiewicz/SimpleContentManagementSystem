@@ -11,7 +11,7 @@ $I->fillField('email', 'john.doe@gmail.com');
 $I->fillField('password', '12345678');
 $I->click('#login');
 $I->amOnPage("/john_doe/tytul_strony/blog/1");
-/*
+
 $I->click("edit");
 $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog/1/edit");
 $I->fillField('title', 'tytul2');
@@ -35,8 +35,9 @@ $I->see('inna tresc posta: Litwo! Ojczyzno moja! Ty jesteÅ› jak zdrowie. NazywaÅ
 $I->seeElement("img");
 //$I->seeInSource('alt="dzik.jpg"');
 //$I->see('to jest dzik');
-*/
+
 $I->click("#delete_post");
 $I->seeCurrentUrlEquals("/john_doe/tytul_strony/blog");
 $I->see("No posts.");
+
 
