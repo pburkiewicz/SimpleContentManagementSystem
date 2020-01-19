@@ -13,6 +13,14 @@
                 @forelse($pages as $page)
                     <li>
                         <h2><strong><a href ="{{ url($page->page_path) }}">{{ $page->page_name }} -  {{ $page->page_type }}</a></strong></h2>
+                        @if($page->page_path != $page->page_name ) {{-- not allowed to delete main website without deleting the user account --}}
+                        {{-- TODO... delete user account --}}
+                            <form method="post" action="{{ route('pages.destroy', ['user'=>$user->page_name, $page]) }}">
+                                {{ method_field('DELETE') }}
+                                {{ csrf_field() }}
+                                <input id="delete_post" type="submit" value="Delete">
+                            </form>
+                        @endif
                         <a href="{{ route('coworker.create', ['user'=>$user->page_name,'page_id'=>$page->page_name]) }}">Invite coworker</a>
                         <ul>
                         @forelse($coworkers->where('page_id',$page->id) as $writer_data)

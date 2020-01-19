@@ -38,7 +38,6 @@ class PageController extends Controller
      */
     public function create(string $user)
     {
-
             return view('pages.create')->withUser($user);
     }
 
@@ -50,10 +49,10 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-       // echo
         //if( $request->user()->page_name == $request->getPathInfo()[0]) {
+
             $this->validate($request, [
-                'page_name' => 'required',
+                'page_name' => 'required|alpha_dash|unique:pages,page_name,NULL,user_id'
             ]);
 
             $page = new Page();
@@ -113,8 +112,9 @@ class PageController extends Controller
      * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Page $page)
+    public function destroy(string $user, Page $page)
     {
-        //
+        $page->delete();
+        return redirect()->route('pages.index',  $user);
     }
 }
