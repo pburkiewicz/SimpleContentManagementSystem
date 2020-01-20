@@ -8,7 +8,7 @@
                     <div class="card-header">{{ __('Posts') }}</div>
 
                     <div class="card-body">
-                        <form method="post" action="{{ route('blog.update', ['blog' =>$blog->id, 'user' => $blog->page->user->page_name, 'path' => $blog->page->page_name]) }}">
+                        <form method="post" action="{{ route('blog.update', ['blog' =>$blog->id, 'user' => $blog->page->user->page_name, 'path' => $blog->page->page_name]) }}"enctype="multipart/form-data">
                             {{ csrf_field() }}
                             {{ method_field('PUT') }}
                             <div class="form-group row">

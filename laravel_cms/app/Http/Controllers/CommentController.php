@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Coworker;
+use App\Page;
 use Illuminate\Http\Request;
 use App\Blog;
 use Illuminate\Support\Facades\Auth;
@@ -111,8 +113,9 @@ class CommentController extends Controller
      */
     public function destroy(string $user, string $path, Blog $blog, Comment $comment)
     {
+        $coworkers = Coworker::where('page_id', $blog->page_id)->where('user_id',Auth::user()->id)->first();
         if( Auth::check() ) {   # user is logged in
-            if (Auth::user() == $comment->user or Auth::user() == $blog->user) { # user is owner of comment
+            if (Auth::user() == $comment->user or Auth::user() == $blog->user or Auth::user()->id==$coworkers->user_id) { # user is owner of comment
                 $comment->delete();
             }
         }

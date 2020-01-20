@@ -19,6 +19,7 @@ class CreateBlogsTable extends Migration
             $table->text('contents')->nullable();    # article
             $table->unsignedBigInteger('page_id');
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade'); # page contains a blog
+            $table->unsignedBigInteger('user_id');
             //$table->string('page_path');   # url of page that contains a article
             $table->timestamps();
         });

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Blog;
+use App\Coworker;
 use App\Gallery;
 use App\Page;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -21,7 +23,8 @@ class GalleryController extends Controller
         $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
         $posts = Blog::where('page_id', $page->id)->with('page')->orderBy('created_at', 'desc')->paginate(10);
         // TODO... Fetch from style database table for current blog, and then set $template and pass to view.
-        return view('galleries.index')->withBlogs($posts)->withPage($page);
+        $coworkers = Coworker::where('page_id', $page->id)->where('user_id',Auth::user()->id)->first();
+        return view('galleries.index')->withBlogs($posts)->withPage($page)->withCoworkers($coworkers)->withUser(Auth::user());
     }
 
     /**
@@ -49,6 +52,7 @@ class GalleryController extends Controller
 
         $blog = new Blog();
         $blog['title']= $request->title;
+        $blog->user_id=Auth::user()->id;
         $blog->contents = NULL;
         $blog->page_id = Page::where('page_name',$path)->first()->id;
         $blog->save();
@@ -81,7 +85,8 @@ class GalleryController extends Controller
         $blog = Blog::where('id', $blog)->first();
         $galleries = Gallery::where('blog_id', $blog->id)->first();
 //        $blog = Blog::where('id', $galleries->blog_id)->first();
-        return view('galleries.show')->withBlog($blog)->withGalleries($galleries);// ->withComments($comments)
+        $coworkers = Coworker::where('page_id', $blog->page_id)->first();
+        return view('galleries.show')->withBlog($blog)->withGalleries($galleries)->withCoworkers($coworkers);// ->withComments($comments)
     }
 
     /**
