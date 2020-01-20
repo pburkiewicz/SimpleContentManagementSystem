@@ -1,5 +1,5 @@
 <h2>Posts:</h2>
-@if(Auth::user() && ($page->user_id==$user->id || $coworkers->user_id==$user->id))
+@if(Auth::user() && ($page->user_id==Auth::user()->id || ($coworkers and $coworkers->user_id==Auth::user()->id)))
     <a href="{{ url($page->page_path.'/create') }}">Create new...</a>
 @endif
 <ul>
