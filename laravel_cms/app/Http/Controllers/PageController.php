@@ -38,7 +38,7 @@ class PageController extends Controller
      */
     public function create(string $user)
     {
-            return view('pages.create')->withUser($user);
+        return view('pages.create')->withUser($user);
     }
 
     /**
@@ -68,6 +68,10 @@ class PageController extends Controller
                 $page->page_path = "/". $request->user()->page_name.'/'.$request->page_name.'/gallery';
                 $page->save();
                 return redirect()->route('gallery.index', ['user'=> $request->user()->page_name, 'path' => $page->page_name]);
+            }elseif($page->page_type == "blank"){
+                $page->page_path = "/".$request->user()->page_name."/".$request->page_name.'/blank';
+                $page->save();
+                return redirect()->route('blank.index', ['user'=> $request->user()->page_name, 'path' => $page->page_name]);
             }
     //    }
     }

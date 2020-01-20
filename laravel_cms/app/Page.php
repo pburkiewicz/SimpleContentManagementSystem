@@ -18,4 +18,9 @@ class Page extends Model
     {
         return $this->hasMany('App\Gallery');
     }
+    public function blank()
+    {
+        return $this->hasMany('App\Blank');
+    }
+
 }
