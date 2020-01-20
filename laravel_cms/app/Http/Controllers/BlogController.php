@@ -40,6 +40,7 @@ public function index(Request $request)
 */
 public function create(Request $request, string $user, string $path)
 {
+    if(!Auth::check()) return view('welcome');
     return view('blogs.create')->withPage(Page::where('page_name',$path)->first());
 }
 
@@ -94,7 +95,8 @@ public function show(string $user, string $path,Blog $blog)
 {
     $comments = Comment::where('blog_id', $blog->id)->orderBy('created_at', 'desc')->paginate(10);//$blog->find($blog->id)->comments;
     $galleries = Gallery::where('blog_id', $blog->id)->first();
-    $coworkers = Coworker::where('page_id', $blog->page_id)->first();
+    $coworkers=NULL;
+    if (Auth::check()) $coworkers = Coworker::where('page_id', $blog->page_id)->where('user_id', Auth::user()->id)->first();
     return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries)->withCoworkers($coworkers);
 }
 
