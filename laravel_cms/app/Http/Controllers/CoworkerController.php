@@ -39,17 +39,31 @@ class CoworkerController extends Controller
      */
     public function store(Request $request, string $user, string $path)
     {
-
+        $user = Auth::user();
         $this->validate($request, [
             'email'=>['required', 'string', 'email', 'max:255']
         ]);
-        $coworker = new Coworker();
-        $coworker->user_id = User::where('email',$request->email)->first()->id;
-        $coworker->owner_id = $request->user()->id;
+        $mail = User::where('email',$request->email)->first();
         $page = Page::where('page_name',$path)->first();
+        if (!$mail)
+        {
+            return view('coworker.create')->withPage(Page::where('page_name',$path)->first())->withInfo("Given email couldn't be found");
+        }
+        if ($mail->id==$user->id)
+        {
+            return view('coworker.create')->withPage(Page::where('page_name',$path)->first())->withInfo("You can't invite yourself!");
+        }
+        $coworker = Coworker::where('owner_id', $user->id)->where('page_id', $page->id)->where('user_id',$mail->id)->first();
+        if($coworker)
+        {
+            return view('coworker.create')->withPage(Page::where('page_name',$path)->first())->withInfo("User already invited!");
+        }
+        $coworker = new Coworker();
+        $coworker->user_id = $mail->id;
+        $coworker->owner_id = $request->user()->id;
         $coworker->page_id=$page->id;
         $coworker->save();
-        $user = Auth::user();
+        //route('pages.index', ['user' => $user->page_name])
         return redirect($user->page_name . '/pages')->withUser($user);
     }
 
