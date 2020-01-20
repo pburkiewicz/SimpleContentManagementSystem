@@ -26,8 +26,11 @@ public function index(Request $request)
 {
     $page = Page::where('page_path',$request->getPathInfo())->orWhere('page_path',substr_replace($request->getPathInfo(), "", -1))->first();
     $posts = Blog::where('page_id', $page->id)->with('page')->orderBy('created_at', 'desc')->paginate(10);
-    $coworkers = Coworker::where('page_id', $page->id)->where('user_id',Auth::user()->id)->first();
-    return view('blogs.index')->withBlogs($posts)->withPage($page)->withCoworkers($coworkers)->withUser(Auth::user());
+    if (Auth::user()) {
+        $coworkers = Coworker::where('page_id', $page->id)->where('user_id', Auth::user()->id)->first();
+        return view('blogs.index')->withBlogs($posts)->withPage($page)->withCoworkers($coworkers)->withUser(Auth::user());
+    }
+    return view('blogs.index')->withBlogs($posts)->withPage($page);
 }
 
 /**
