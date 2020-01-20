@@ -134,10 +134,13 @@ public function update(Request $request, string $user, string $path, Blog $blog)
 
         $filename = time() . '.' . $image->getFilename() . '.' . $extension;
         Storage::disk('public')->put($filename, File::get($image));
-        File::delete("uploads/" . $gallery->filename);
+        if(!$gallery) $gallery = new Gallery;
+        else File::delete("uploads/" . $gallery->filename);
         $gallery->mime = $image->getClientMimeType();
         $gallery->original_filename = $image->getClientOriginalName();
         $gallery->filename = $filename;
+        $gallery->page_id = $blog->page_id;
+        $gallery->blog_id=$blog->id;
     }
     if( $gallery) {
         $gallery->blog_id = $blog->id;
