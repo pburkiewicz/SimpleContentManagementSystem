@@ -4,6 +4,9 @@
             <!--{{ config('app.name', 'Laravel') }}-->
                 CMS
         </a>
+        @if (Route::has('login'))
+                 <a class="navbar-brand" href="{{ url('/home') }}">Home</a>
+            @endif
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
