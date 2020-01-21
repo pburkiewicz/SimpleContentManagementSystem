@@ -46,7 +46,7 @@ class GalleryController extends Controller
     public function store(Request $request,string $user, string $path)
     {
         $page = Page::where('page_name', $path)->first();
-        $coworkers = Coworker::where('page_id', $page)->where('user_id', Auth::user()->id)->first();
+        $coworkers = Coworker::where('page_id', $page->id)->where('user_id', Auth::user()->id)->first();
         if (!Auth::check() or (!$coworkers and $page->user_id!=Auth::user()->id)) return view('welcome');
         $request->validate([
         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -118,7 +118,7 @@ class GalleryController extends Controller
     public function update(Request $request, string $user, string $path, string $blog)
     {
         $blog = Blog::where('id', $blog)->first();
-        //if ($blog->user_id!=Auth::user()->id) return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+        if ($blog->user_id!=Auth::user()->id) return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
         $request->validate([
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'title' => 'required',

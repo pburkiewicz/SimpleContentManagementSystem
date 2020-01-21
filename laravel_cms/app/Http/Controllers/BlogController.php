@@ -55,7 +55,7 @@ public function create(Request $request, string $user, string $path)
 public function store(Request $request,string $user, string $path)
 {
     $page = Page::where('page_name', $path)->first();
-    $coworkers = Coworker::where('page_id', $page)->where('user_id', Auth::user()->id)->first();
+    $coworkers = Coworker::where('page_id', $page->id)->where('user_id', Auth::user()->id)->first();
     if (!Auth::check() or (!$coworkers and $page->user_id!=Auth::user()->id)) return view('welcome');
     $this->validate($request, [
     'title' => 'required',
