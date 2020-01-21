@@ -14,48 +14,40 @@ $I->selectOption('page_type',"blog");
 $I->click("Add page");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
-
 $I->fillField('page_name', 'spacja spacja');
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
-
 
 $I->fillField('page_name', '*+-%=:;');
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
-
 $I->fillField('page_name', '\\/');
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
-
 
 $I->fillField('page_name', "''\"\"");
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
-
 $I->fillField('page_name', '?!.,');
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
-
 
 $I->fillField('page_name', '$@');
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
-
 $I->fillField('page_name', '(){}[]');
 $I->click("Add page");
 $I->see("The page name may only contain letters, numbers, dashes and underscores.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
-
 
 $I->fillField('page_name', 'john_doe');
 $I->click("Add page");

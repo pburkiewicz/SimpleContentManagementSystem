@@ -62,23 +62,23 @@ $I->click("Add page");
 $I->see("The page name has already been taken.");
 $I->seeCurrentUrlEquals("/john_doe/pages/create");
 
-$I->fillField('page_name', 'tytul_strony');
+$I->fillField('page_name', 'tytul_str');
 $I->selectOption('page_type',"blank");
 $I->click("Add page");
 
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/blank");
+$I->seeCurrentUrlEquals("/john_doe/tytul_str/blank");
 $I->click("Create your own HTML");
 
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/blank/create");
+$I->seeCurrentUrlEquals("/john_doe/tytul_str/blank/create");
 $I->click("Publish");
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/blank/create");
+$I->seeCurrentUrlEquals("/john_doe/tytul_str/blank/create");
 $I->fillField('contents',"kod html");
 $I->click("Publish");
 
 $I->see("kod html");
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/blank");
+$I->seeCurrentUrlEquals("/john_doe/tytul_str/blank");
 $I->click("Edit your HTML");
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/blank/1/edit");
+$I->seeCurrentUrlEquals("/john_doe/tytul_str/blank/1/edit");
 
 //kod html from plik.html
 
@@ -86,7 +86,7 @@ $I->fillField('contents',"<html><body><h1>Main heading</h1><p>Be <b>bold</b> in 
 
 $I->click("Publish");
 $I->dontSee("kod html");
-$I->seeCurrentUrlEquals("/john_doe/tytul_strony/blank");
+$I->seeCurrentUrlEquals("/john_doe/tytul_str/blank");
 
 $I->see("Main heading");
 $I->seeElement("img");
@@ -97,6 +97,6 @@ $I->seeLink('another page');
 $I->click("Home");
 $I->click("Manage your website");
 $I->click('#delete_post');
-$I->dontSee("tytul_strony - blank");
+$I->dontSee("tytul_str - blank");
 
 
