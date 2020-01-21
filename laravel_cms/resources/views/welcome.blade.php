@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Zajebisty CMS
+                    CMS
                 </div>
                 <!--
                 <div class="links">
