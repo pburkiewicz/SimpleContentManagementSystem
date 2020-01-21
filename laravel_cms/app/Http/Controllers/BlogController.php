@@ -54,6 +54,9 @@ public function create(Request $request, string $user, string $path)
 */
 public function store(Request $request,string $user, string $path)
 {
+    $page = Page::where('page_name', $path)->first();
+    $coworkers = Coworker::where('page_id', $page)->where('user_id', Auth::user()->id)->first();
+    if (!Auth::check() or (!$coworkers and $page->user_id!=Auth::user()->id)) return view('welcome');
     $this->validate($request, [
     'title' => 'required',
     'contents' => 'required',
@@ -121,6 +124,8 @@ public function edit(string $user, string $path, Blog $blog)
 */
 public function update(Request $request, string $user, string $path, Blog $blog)
 {
+    if ($blog->user_id!=Auth::user()->id) return redirect()->route('blog.show', ['user'=>$user, 'path'=> $path, 'blog' =>$blog]);
+
     $this->validate($request, [
         'title' => 'required',
         'contents' => 'required',
@@ -163,6 +168,9 @@ public function update(Request $request, string $user, string $path, Blog $blog)
 */
 public function destroy(string $user, string $path, Blog $blog)
 {
+    $page = Page::where('page_name', $path)->first();
+    $coworkers = Coworker::where('page_id', $page)->where('user_id', Auth::user()->id)->first();
+    if (!Auth::check() or (!$coworkers and $page->user_id!=Auth::user()->id)) return view('welcome');
     $images = Gallery::where('blog_id',$blog->id)->get();
     foreach( $images as $image){
         File::delete("uploads/" . $image->filename);
