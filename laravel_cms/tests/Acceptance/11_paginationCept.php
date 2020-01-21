@@ -223,7 +223,7 @@ $I->click("Create new...");
 $I->fillField('title', 'tytul k');
 $I->fillField('image', '/home/student/php_2019_laravel_cms/laravel_cms/tests/Acceptance/dzik.jpg');
 $I->click("Publish");
-$I->amOnPage("/john_doe/tytul_galerii/gallerygit ");
+$I->amOnPage("/john_doe/tytul_galerii/gallery ");
 
 $I->see("tytul k");
 $I->see("tytul b");
