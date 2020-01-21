@@ -87,7 +87,7 @@ class GalleryController extends Controller
 //        $blog = Blog::where('id', $galleries->blog_id)->first();
         $coworkers=NULL;
         if (Auth::check()) $coworkers = Coworker::where('page_id', $blog->page_id)->where('user_id', Auth::user()->id)->first();
-        return view('galleries.show')->withBlog($blog)->withGalleries($galleries)->withCoworkers($coworkers);// ->withComments($comments)
+        return view('galleries.show')->withBlog($blog)->withGalleries($galleries)->withCoworkers($coworkers)->withBack('/'. $user . '/' .$path . '/blog');// ->withComments($comments)
     }
 
     /**

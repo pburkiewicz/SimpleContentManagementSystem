@@ -5,6 +5,9 @@
 
     @includeIf("templates." . "default"  . ".head_display")
     @includeIf("templates." . "default"  . ".title_display")
+    @isset($back)
+    <p><a href = "{{$back}}">Go back</a></p>
+    @endisset
     @if($galleries)
         @includeIf("templates." . "default"  . ".image_display")
     @endif

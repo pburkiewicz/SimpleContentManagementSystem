@@ -97,7 +97,7 @@ public function show(string $user, string $path,Blog $blog)
     $galleries = Gallery::where('blog_id', $blog->id)->first();
     $coworkers=NULL;
     if (Auth::check()) $coworkers = Coworker::where('page_id', $blog->page_id)->where('user_id', Auth::user()->id)->first();
-    return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries)->withCoworkers($coworkers);
+    return view('blogs.show')->withBlog($blog)->withComments($comments)->withGalleries($galleries)->withCoworkers($coworkers)->withBack('/'. $user . '/' .$path . '/blog');
 }
 
 /**
